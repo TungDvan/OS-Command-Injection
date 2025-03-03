@@ -195,29 +195,29 @@ Thử thách này gồm 7 level.
 
 - Trước tiên mở `burp suite` lên, vô `Proxy` và `Open browser`:
 
-    ![alt text](image.png)
+    ![alt text](IMG/3.1/image.png)
 
     Lúc này burp suite sẽ mở một trang chrome của burp suite lên, bây giờ mọi việc truy cập trang web của hình sẽ được burp suite ghi lại.
 
-    ![alt text](image-1.png)
+    ![alt text](IMG/3.1/image-1.png)
 
 - Bật sẵn `docker desktop`, truy cập vào `localhost:3003`.
 
-    ![alt text](image-2.png)
+    ![alt text](IMG/3.1/image-2.png)
 
     Ở trang `Proxy` vô `HTTP History` chuột phải là nhấn `Clear History` để dẽ dàng nhìn thấy gói tin gửi đi.
 
 - Bây giờ quay lại web của burp suite gửi một gói tin check lệnh `ping 8.8.8.8`.
 
-    ![alt text](image-3.png)
+    ![alt text](IMG/3.1/image-3.png)
 
     Lúc này quay lại phần mềm burp suite ta thấy một gói tin được gửi đi.
 
-    ![alt text](image-4.png)
+    ![alt text](IMG/3.1/image-4.png)
 
     Click vào gói tin đó thì ta thấy đó chính là gói tin Request và Response của lệnh ping vừa rùi.
 
-    ![alt text](image-5.png)
+    ![alt text](IMG/3.1/image-5.png)
 
 - Lúc này ta sẽ sử dụng chức năng `Send to Repeater` trong `burp suite` để thực hiện chỉnh sửa gói tin `Request`.
 
@@ -225,19 +225,19 @@ Thử thách này gồm 7 level.
 
     Ta thực hiện chuột phải và chọn `Send to Repeater`.
 
-    ![alt text](image-6.png)
+    ![alt text](IMG/3.1/image-6.png)
 
     Lúc này ta sang phần `Repeater` thì ta thấy 1 gói tin `Respond` chưa được gửi đi, muốn gửi đi thì ta nhấn `Send`.
 
-    ![alt text](image-7.png)
+    ![alt text](IMG/3.1/image-7.png)
 
 - Ta lướt xuống cuối của gói tin Respond ta sẽ thấy lệnh được gửi đi:
 
-    ![alt text](image-8.png)
+    ![alt text](IMG/3.1/image-8.png)
 
     Lúc này ta thêm `%0als /` sau phần `command=ping&target=8.8.8.8`. Sau đó ta nhấn `Send`:
 
-    ![alt text](image-9.png)
+    ![alt text](IMG/3.1/image-9.png)
 
     Như vậy lúc này ta đã có thể tiêm câu lệnh mà không cần sử dụng những kí tự như `;`, `||` hay `&&`.
 
