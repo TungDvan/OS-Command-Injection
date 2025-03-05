@@ -4,7 +4,10 @@
         $target = $_POST['target'];
         switch($command) {
 			case "backup":
+                $cmd = "timeout 3 zip /tmp/$target -r /var/www/html/index.php 2>&1";
 				$result = shell_exec("timeout 3 zip /tmp/$target -r /var/www/html/index.php 2>&1");
+                var_dump($cmd);
+                var_dump($result);
                 if ($result !== null && strpos($result, "zip error") === false)
                     die("Backup thành công");
                 else
