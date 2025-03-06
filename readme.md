@@ -335,3 +335,36 @@ Thử thách này gồm 7 level.
     ![alt text](IMG/4.1/image-1.png)
 
     ![alt text](IMG/4.1/image-2.png)
+
+# LAB5
+
+- Như đã đề cập ở trên, LAB4 chúng ta khum thể gửi gói tin ra ngoài được và chúng ta cũng không thể debug được, điều chúng ta biết có lệnh `RUN chmod g+w /var/www/html/`. Lệnh này cho phép các thành viên trong nhóm sở hữu thư mục `/var/www/html/` có thể ghi (write), chỉnh sửa, hoặc tạo tệp/thư mục mới bên trong thư mục này.
+
+- Thư mục `/var/www/html` là thư mục chứa các tệp như HTML, PHP, CSS,.. và các tài nguyên khác của web. KHi bạn truy cập vào địa chỉ localhost thì nội dung hiển thị trên trình duyệt chính là những file có trong thư mục `/var/www/html`.
+
+- Vậy ta thấy là thư mục này đang được cho phép ghi, ta chỉ cần ghi kết quả của những lệnh chèn thêm vào 1 file có trong thư mục này rùi thục hiện truy cập vào trang web thông qua đường dẫn là ra.
+
+- Ta thực hiện như sau:
+
+    ```bash
+    backup ; ls / > /var/www/html/tt.txt
+    ```
+
+    ![alt text](IMG/5/image.png)
+
+    Lúc này ta thực hiện truy cập trang web `http://localhost/tt.txt` thì ta sẽ thấy kết quả của lệnh liệt kê các thư mục có trong thư mục gốc.
+
+    ![alt text](IMG/5/image-1.png)
+
+    Ta thực hiện tiếp.
+
+    ```bash
+    backup ; echo `cat /aef15696cd_secret.txt` > /var/www/html/tt.txt
+    ```
+
+    Load lại ta sẽ được flag là:
+
+    ![alt text](IMG/5/image-2.png)
+
+# LAB6
+
